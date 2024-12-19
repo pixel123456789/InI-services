@@ -17,12 +17,12 @@ function Head({ pageTitle }: HeadTypes) {
             window.document.title = title;
         } else {
             if (pageTitle) {
-                window.document.title = pageTitle + " | Metallic";
+                window.document.title = pageTitle + " | inI Services";  // Changed "Metallic" to "inI Services"
             } else {
-                window.document.title = "Metallic";
+                window.document.title = "inI Services";  // Changed the default title
             }
         }
-    }, [title, locale])
+    }, [title, locale]);
 
     useEffect(() => {
         const iconElement = document.querySelector("link[rel='icon']")
@@ -34,7 +34,7 @@ function Head({ pageTitle }: HeadTypes) {
                 iconElement.setAttribute("href", "/assets/logo.svg");
             }
         }
-    }, [icon])
+    }, [icon]);
 
     useEffect(() => {
         const themeChannel = new BroadcastChannel("metallic/theme");
@@ -46,7 +46,7 @@ function Head({ pageTitle }: HeadTypes) {
         localStorage.setItem("metallic/theme", theme);
         window.document.body.dataset.theme = theme;
         themeChannel.postMessage(theme)
-    }, [theme])
+    }, [theme]);
 
     useEffect(() => {
         const serviceChannel = new BroadcastChannel("metallic/service");
@@ -57,7 +57,7 @@ function Head({ pageTitle }: HeadTypes) {
 
         localStorage.setItem("metallic/service", service);
         serviceChannel.postMessage(service)
-    }, [service])
+    }, [service]);
 
     useEffect(() => {
         const engineChannel = new BroadcastChannel("metallic/engine");

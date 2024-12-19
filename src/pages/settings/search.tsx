@@ -26,22 +26,6 @@ function SearchSettings() {
     return (
         <>
             <h1 class="text-4xl font-bold mb-8">{t("settings.search.service.title")}</h1>
-            <section class="flex flex-wrap items-center gap-3">
-                <SquareButton active={service == "uv"} onClick={() => setService("uv")}>
-                    <img draggable={false} height="24" width="24" src={ultravioletLogo} loading="lazy" />
-                    <span class="font-bold"><Obfuscated>Ultraviolet</Obfuscated></span>
-                </SquareButton>
-                <SquareButton active={service == "scramjet"} onClick={() => setService("scramjet")}>
-                    <img draggable={false} height="24" width="24" src={scramjetLogo} loading="lazy" />
-                    <span class="font-bold"><Obfuscated>Scramjet</Obfuscated></span>
-                </SquareButton>
-                {rammerhead ? (
-                    <SquareButton active={service == "rammerhead"} onClick={() => setService("rammerhead")}>
-                        <img draggable={false} height="24" width="24" src={rammerheadLogo} loading="lazy" />
-                        <span class="font-bold"><Obfuscated>Rammerhead</Obfuscated></span>
-                    </SquareButton>
-                ) : null}
-            </section>
             <h1 class="text-4xl font-bold my-8">{t("settings.search.searchEngine.title")}</h1>
             <section class="flex flex-wrap items-center gap-3">
                 <SquareButton active={searchEngine == searchEngineData.google} onClick={() => setSearchEngine(searchEngineData.google)}>
@@ -81,18 +65,7 @@ function SearchSettings() {
             <section class="flex flex-wrap items-center gap-3">
                 <SquareInput placeholder={t("settings.search.customSearchEngine.input")} value={searchEngine} onInput={(e: any) => setSearchEngine(e.target.value)} />
             </section>
-            <h1 class="text-4xl font-bold my-8">{t("settings.search.open.title")}</h1>
-            <section class="flex flex-wrap items-center gap-3">
-                <SquareButton active={openUsing == "default"} onClick={() => setOpenUsing("default")}>
-                    <span class="font-bold">{t("settings.search.open.options.default")}</span>
-                </SquareButton>
-                <SquareButton active={openUsing == "direct"} onClick={() => setOpenUsing("direct")}>
-                    <span class="font-bold">{t("settings.search.open.options.direct")}</span>
-                </SquareButton>
-                <SquareButton active={openUsing == "about:blank"} onClick={() => setOpenUsing("about:blank")}>
-                    <span class="font-bold">about:blank</span>
-                </SquareButton>
-            </section>
+            
         </>
     )
 }

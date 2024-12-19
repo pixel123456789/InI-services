@@ -181,15 +181,15 @@ function Home() {
 			{theme == "hub" ? (
 				<h1 class="title mt-32 mb-8 sm:mb-16 flex items-center justify-center">
 					<span class="text-4xl sm:text-6xl font-bold text-center font-title">
-						<Obfuscated>Metal</Obfuscated>
+						<Obfuscated>InI</Obfuscated>
 					</span>
 					<span class="text-4xl sm:text-6xl font-bold text-center font-title bg-secondary rounded p-1 ml-1 text-textInverse">
-						<Obfuscated>lic</Obfuscated>
+						<Obfuscated>Services</Obfuscated>
 					</span>
 				</h1>
 			) : (
 				<h1 class="title text-4xl sm:text-6xl font-bold text-center mt-32 mb-8 sm:mb-16 font-title">
-					<Obfuscated>Metallic</Obfuscated>
+					<Obfuscated>InI Services</Obfuscated>
 				</h1>
 			)}
 			<div class="flex flex-col items-center justify-center">

@@ -2,11 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useGlobalState } from "@ekwoka/preact-global-state";
 import { SquareButton } from "../../interface/button";
 import { SquareInput } from "../../interface/input";
-import { rammerhead } from "../../settings";
 import { Obfuscated } from "../../util/obfuscate";
-import ultravioletLogo from "../../assets/services/ultravioletLogo.png";
-import scramjetLogo from "../../assets/services/scramjetLogo.png";
-import rammerheadLogo from "../../assets/services/rammerheadLogo.png";
 import { GoogleLogo } from "../../assets/searchEngines/googleLogo";
 import { DuckDuckGoLogo } from "../../assets/searchEngines/duckDuckGoLogo";
 import { BingLogo } from "../../assets/searchEngines/bingLogo";
@@ -19,9 +15,8 @@ import searchEngineData from "../../assets/searchEngineData.json";
 
 function SearchSettings() {
     const { t } = useTranslation();
-    const [service, setService] = useGlobalState<string>("service", localStorage.getItem("metallic/service") || "uv");
+   
     const [searchEngine, setSearchEngine] = useGlobalState<string>("engine", localStorage.getItem("metallic/engine") || searchEngineData.google);
-    const [openUsing, setOpenUsing] = useGlobalState<string>("open", localStorage.getItem("metallic/open") || "default");
 
     return (
         <>

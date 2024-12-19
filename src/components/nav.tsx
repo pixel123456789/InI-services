@@ -14,7 +14,7 @@ function Nav() {
     return (
         <nav class="nav px-7 py-5 flex items-center justify-between sticky top-0 right-0 left-0 bg-background">
             <Link class="logo" href="/">
-                <Logo class="h-10 w-10" />
+                <Logo/>
             </Link>
             <div class="flex gap-4">
                 <Link href="/" class="sr-only sm:not-sr-only">

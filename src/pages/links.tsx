@@ -127,9 +127,6 @@ function Links() {
                         <div class="whitespace-nowrap overflow-hidden text-lg font-bold mt-3 text-ellipsis">
                             {link.name}
                         </div>
-                        <div class="text-base whitespace-nowrap overflow-hidden text-ellipsis">
-                            {link.description}
-                        </div>
                         <div
                             class="mt-2 text-base overflow-hidden text-ellipsis"
                             style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}

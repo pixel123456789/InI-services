@@ -43,7 +43,7 @@ function Nav() {
                 </Link>
                 <Link href="/links">
                   <Button active={true}>
-                    <span class="font-bold sr-only sm:not-sr-only">{t("nav.links")}</span>
+                    <span class="font-bold sr-only sm:not-sr-only">{t("Links")}</span>
                   </Button>
                 </Link>
             </div>

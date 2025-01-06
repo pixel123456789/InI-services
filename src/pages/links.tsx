@@ -36,7 +36,6 @@ function Links() {
     const resultsIncrease = 20;
     const [resultsNumber, setResultsNumber] = useState(resultsIncrease);
 
-    // Define `links` as an array of LinkItem
     const links: LinkItem[] = linksData;
 
     async function openLink(url: string) {
@@ -115,14 +114,11 @@ function Links() {
                         onClick={async () => await openLink(link.url)}
                         class="rounded-3xl h-72 bg-secondary flex flex-col p-4 cursor-pointer w-full sm:w-64 text-left"
                     >
+                        {/* Removed the image and added a colored design */}
                         <div class="h-36 w-full bg-background rounded-xl flex items-center justify-center overflow-hidden select-none">
-                            <img
-                                src={link.icon}
-                                draggable={false}
-                                loading="lazy"
-                                alt={link.name}
-                                class="h-full w-full object-cover"
-                            />
+                            <div class="h-full w-full bg-primary flex items-center justify-center text-white text-xl font-bold">
+                                {link.name.charAt(0).toUpperCase()}
+                            </div>
                         </div>
                         <div class="whitespace-nowrap overflow-hidden text-lg font-bold mt-3 text-ellipsis">
                             {link.name}

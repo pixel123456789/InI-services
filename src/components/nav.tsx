@@ -14,7 +14,7 @@ function Nav() {
     return (
         <nav class="nav px-7 py-5 flex items-center justify-between sticky top-0 right-0 left-0 bg-background">
             <Link class="logo" href="/">
-                <Logo/>
+                <Logo />
             </Link>
             <div class="flex gap-4">
                 <Link href="/" class="sr-only sm:not-sr-only">
@@ -40,6 +40,11 @@ function Nav() {
                         <SettingsIcon />
                         <span class="font-bold sr-only sm:not-sr-only">{t("nav.settings")}</span>
                     </Button>
+                </Link>
+                <Link href="/links">
+                  <Button active={true}>
+                    <span class="font-bold sr-only sm:not-sr-only">{t("nav.links")}</span>
+                  </Button>
                 </Link>
             </div>
         </nav>

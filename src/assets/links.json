@@ -1,4 +1,10 @@
 [
+     {
+        "name": "Catflix.su",
+        "url": "https://catflix.su/",
+        "icon": "https://catflix.su/favicon.ico",
+        "description": "Watch movies and shows for free."
+    },
     {
         "name": "Little Alchemy 2",
         "url": "https://littlealchemy2.com/",
@@ -268,12 +274,6 @@
         "url": "https://www.kongregate.com/",
         "icon": "https://www.kongregate.com/favicon.ico",
         "description": "Browse and play free online games."
-    },
-    {
-        "name": "Catflix.su",
-        "url": "https://catflix.su/",
-        "icon": "https://catflix.su/favicon.ico",
-        "description": "Watch movies and shows for free."
     },
     {
         "name": "Super Mario Bros",

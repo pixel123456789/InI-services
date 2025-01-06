@@ -7,19 +7,19 @@ import { SearchIcon } from "../assets/searchIcon";
 import { CloseIcon } from "../assets/closeIcon";
 import linksData from "../assets/links.json";
 
-interface LinkItem {
-		name: string;
-		url: string;
-		icon: string;
-		description: string;
+declare global {
+    interface Window {
+        chemical: {
+            encode: Function;
+        };
+    }
 }
 
-declare global {
-		interface Window {
-				chemical: {
-						encode: Function;
-				};
-		}
+interface LinkItem {
+    name: string;
+    url: string;
+    icon: string;
+    description: string;
 }
 
 function Links() {
@@ -36,6 +36,7 @@ function Links() {
     const resultsIncrease = 20;
     const [resultsNumber, setResultsNumber] = useState(resultsIncrease);
 
+    // Define `links` as an array of LinkItem
     const links: LinkItem[] = linksData;
 
     async function openLink(url: string) {
@@ -62,7 +63,7 @@ function Links() {
 
     const filteredLinks = links.filter((link: LinkItem) => {
         if (!searchValue) {
-            return true;
+            return true; // Show all links if no search value
         } else {
             return link.name.toLowerCase().trim().includes(searchValue);
         }
@@ -126,9 +127,12 @@ function Links() {
                         <div class="whitespace-nowrap overflow-hidden text-lg font-bold mt-3 text-ellipsis">
                             {link.name}
                         </div>
+                        <div class="text-base whitespace-nowrap overflow-hidden text-ellipsis">
+                            {link.description}
+                        </div>
                         <div
-                            class="text-base whitespace-nowrap overflow-hidden text-ellipsis"
-                            style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1;"
+                            class="mt-2 text-base overflow-hidden text-ellipsis"
+                            style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}
                         >
                             {link.description}
                         </div>

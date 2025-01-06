@@ -17,7 +17,7 @@ function Head({ pageTitle }: HeadTypes) {
             window.document.title = title;
         } else {
             if (pageTitle) {
-                window.document.title = pageTitle + " | inI Services";  // Changed "Metallic" to "inI Services"
+                window.document.title = pageTitle + " | InI Services";  // Changed "Metallic" to "inI Services"
             } else {
                 window.document.title = "inI Services";  // Changed the default title
             }

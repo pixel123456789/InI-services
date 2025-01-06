@@ -1,14 +1,278 @@
 [
     {
-        "name": "Link Name 1",
-        "url": "https://example.com/1",
-        "icon": "https://example.com/icon1.png",
-        "description": "Description of link 1"
+        "name": "Little Alchemy 2",
+        "url": "https://littlealchemy2.com/",
+        "icon": "https://littlealchemy2.com/assets/icon.png",
+        "description": "A fun game where you combine elements to create new items."
     },
     {
-        "name": "Link Name 2",
-        "url": "https://example.com/2",
-        "icon": "https://example.com/icon2.png",
-        "description": "Description of link 2"
+        "name": "GeoGuessr",
+        "url": "https://www.geoguessr.com/",
+        "icon": "https://www.geoguessr.com/logo.png",
+        "description": "A geography game that drops you in a random location on Google Street View."
+    },
+    {
+        "name": "TypingClub",
+        "url": "https://www.typingclub.com/",
+        "icon": "https://www.typingclub.com/logo.png",
+        "description": "A free typing tutor to learn and improve your typing skills."
+    },
+    {
+        "name": "World's Biggest Pac-Man",
+        "url": "https://www.pacman.com/",
+        "icon": "https://www.pacman.com/icon.png",
+        "description": "A unique twist on the classic Pac-Man game with user-generated levels."
+    },
+    {
+        "name": "Sporcle",
+        "url": "https://www.sporcle.com/",
+        "icon": "https://www.sporcle.com/logo.png",
+        "description": "A trivia website with quizzes on a wide range of topics."
+    },
+    {
+        "name": "Incredibox",
+        "url": "https://www.incredibox.com/",
+        "icon": "https://www.incredibox.com/logo.png",
+        "description": "A music creation game where you can mix beats and sounds effortlessly."
+    },
+    {
+        "name": "The Secret Door",
+        "url": "http://www.thesecretdoor.com/",
+        "icon": "http://www.thesecretdoor.com/icon.png",
+        "description": "A virtual travel website that takes you to an unknown location when opened."
+    },
+    {
+        "name": "JigZone",
+        "url": "https://www.jigzone.com/",
+        "icon": "https://www.jigzone.com/icon.png",
+        "description": "A collection of online jigsaw puzzles with various images and difficulty levels."
+    },
+    {
+        "name": "CardGames.io",
+        "url": "https://cardgames.io/",
+        "icon": "https://cardgames.io/logo.png",
+        "description": "Play classic card games online for free."
+    },
+    {
+        "name": "Little Big Snake",
+        "url": "https://littlebigsnake.com/",
+        "icon": "https://littlebigsnake.com/icon.png",
+        "description": "An online multiplayer snake game where you grow your snake by consuming food."
+    },
+    {
+        "name": "Catan Universe",
+        "url": "https://catanuniverse.com/",
+        "icon": "https://catanuniverse.com/logo.png",
+        "description": "Play the popular board game Catan online against other players."
+    },
+    {
+        "name": "Chess.com",
+        "url": "https://www.chess.com/",
+        "icon": "https://www.chess.com/logo.png",
+        "description": "A platform to play chess online against players from around the world."
+    },
+    {
+        "name": "Agar.io",
+        "url": "https://agar.io/",
+        "icon": "https://agar.io/favicon.ico",
+        "description": "An online multiplayer game where you control a cell and must eat others to grow."
+    },
+    {
+        "name": "Canva",
+        "url": "https://www.canva.com/",
+        "icon": "https://www.canva.com/favicon.ico",
+        "description": "A graphic design tool that allows users to create a variety of visual content."
+    },
+    {
+        "name": "Kongregate",
+        "url": "https://www.kongregate.com/",
+        "icon": "https://www.kongregate.com/favicon.ico",
+        "description": "A website offering a vast array of free online games across various genres."
+    },
+    {
+        "name": "Pixel Art Maker",
+        "url": "https://www.pixelartmaker.com/",
+        "icon": "https://www.pixelartmaker.com/favicon.ico",
+        "description": "A tool to create pixel art graphics online."
+    },
+    {
+        "name": "Board Game Arena",
+        "url": "https://boardgamearena.com/",
+        "icon": "https://boardgamearena.com/favicon.ico",
+        "description": "Play a variety of board games online with friends or other players."
+    },
+    {
+        "name": "Blooket",
+        "url": "https://www.blooket.com/",
+        "icon": "https://www.blooket.com/favicon.ico",
+        "description": "Online learning games and quizzes that make studying fun."
+    },
+    {
+        "name": "Slither.io",
+        "url": "https://slither.io/",
+        "icon": "https://slither.io/favicon.ico",
+        "description": "An online multiplayer game where you control a snake and consume orbs to grow."
+    },
+    {
+        "name": "Scribbl.io",
+        "url": "https://skribbl.io/",
+        "icon": "https://skribbl.io/favicon.ico",
+        "description": "A multiplayer drawing and guessing game that’s easy and fun."
+    },
+    {
+        "name": "VRChat",
+        "url": "https://hello.vrchat.com/",
+        "icon": "https://hello.vrchat.com/favicon.ico",
+        "description": "A virtual reality social platform where you can interact and create your own worlds."
+    },
+    {
+        "name": "Window Swap",
+        "url": "https://window-swap.com/",
+        "icon": "https://window-swap.com/favicon.ico",
+        "description": "View the world from someone else's window, virtually travel the globe."
+    },
+    {
+        "name": "Code Combat",
+        "url": "https://codecombat.com/",
+        "icon": "https://codecombat.com/favicon.ico",
+        "description": "A game that teaches you how to code while playing."
+    },
+    {
+        "name": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/",
+        "icon": "https://www.gutenberg.org/favicon.ico",
+        "description": "A digital library offering over 60,000 free eBooks."
+    },
+    {
+        "name": "Kahoot!",
+        "url": "https://kahoot.com/",
+        "icon": "https://kahoot.com/favicon.ico",
+        "description": "Create quizzes and games for educational or entertainment purposes."
+    },
+    {
+        "name": "Free Rice",
+        "url": "https://freerice.com/",
+        "icon": "https://freerice.com/favicon.ico",
+        "description": "A charity website to help fight hunger through quizzes."
+    },
+    {
+        "name": "World Geography Games",
+        "url": "https://world-geography-games.com/",
+        "icon": "https://world-geography-games.com/favicon.ico",
+        "description": "Test and improve your geography skills with various engaging games."
+    },
+    {
+        "name": "Zooniverse",
+        "url": "https://www.zooniverse.org/",
+        "icon": "https://www.zooniverse.org/favicon.ico",
+        "description": "Participate in real-life research projects and help scientists with data."
+    },
+    {
+        "name": "Quizlet",
+        "url": "https://quizlet.com/",
+        "icon": "https://quizlet.com/favicon.ico",
+        "description": "Online learning tool with flashcards, games, and quizzes to help studying."
+    },
+    {
+        "name": "Catflix",
+        "url": "https://catflix.su",
+        "icon": "https://catflix.su/favicon.ico",
+        "description": "Free movie & series streaming, they have everything"
+    },
+    {
+        "name": "Kizi",
+        "url": "https://kizi.com/",
+        "icon": "https://kizi.com/favicon.ico",
+        "description": "A large collection of free online games covering various genres."
+    },
+    {
+        "name": "Trove",
+        "url": "https://trove.game/",
+        "icon": "https://trove.game/favicon.ico",
+        "description": "A voxel-based sandbox game mixing adventure and creativity."
+    },
+    {
+        "name": "Freemath",
+        "url": "https://freemath.org/",
+        "icon": "https://freemath.org/favicon.ico",
+        "description": "Practice math online with free math games and resources."
+    },
+    {
+        "name": "Animal Crossing: Pocket Camp",
+        "url": "https://ac-pocketcamp.com/",
+        "icon": "https://ac-pocketcamp.com/favicon.ico",
+        "description": "A mobile game where you build a campsite and interact with cute animals."
+    },
+    {
+        "name": "Online-Convert",
+        "url": "https://audio.online-convert.com/",
+        "icon": "https://audio.online-convert.com/favicon.ico",
+        "description": "Convert files into various formats online for free."
+    },
+    {
+        "name": "WormsZone.io",
+        "url": "https://wormszone.io/en",
+        "icon": "https://wormszone.io/favicon.ico",
+        "description": "A fun snake game where you start small and grow by eating food."
+    },
+    {
+        "name": "Gartic Phone",
+        "url": "https://gartic.phone/",
+        "icon": "https://gartic.phone/favicon.ico",
+        "description": "A drawing and guessing game that combines aspects of Telephone with Pictionary."
+    },
+    {
+        "name": "Fast.com",
+        "url": "https://fast.com/",
+        "icon": "https://fast.com/favicon.ico",
+        "description": "A simple tool to check your internet speed instantly."
+    },
+    {
+        "name": "Artbreeder",
+        "url": "https://www.artbreeder.com/",
+        "icon": "https://www.artbreeder.com/favicon.ico",
+        "description": "A platform for creating and remixing images with AI."
+    },
+    {
+        "name": "Pogo",
+        "url": "https://www.pogo.com/",
+        "icon": "https://www.pogo.com/favicon.ico",
+        "description": "Play a variety of classic games from card games to puzzles."
+    },
+    {
+        "name": "Bored Panda",
+        "url": "https://www.boredpanda.com/",
+        "icon": "https://www.boredpanda.com/favicon.ico",
+        "description": "A leading art, design, and photography community for creative people."
+    },
+    {
+        "name": "The Oatmeal's Bearly Making It",
+        "url": "https://theoatmeal.com/comics/bearly_making_it",
+        "icon": "https://theoatmeal.com/favicon.ico",
+        "description": "An entertaining comic that tells the story of a bear's struggle."
+    },
+    {
+        "name": "Choose Your Own Adventure",
+        "url": "https://www.chooseyourstory.com/",
+        "icon": "https://www.chooseyourstory.com/favicon.ico",
+        "description": "Create and explore interactive stories where you make the choices."
+    },
+    {
+        "name": "Mythical Creatures Database",
+        "url": "https://www.mythicalcreatureslist.com/",
+        "icon": "https://www.mythicalcreatureslist.com/favicon.ico",
+        "description": "A comprehensive database of mythical creatures from cultures around the world."
+    },
+    {
+        "name": "Science News for Students",
+        "url": "https://www.sciencenewsforstudents.org/",
+        "icon": "https://www.sciencenewsforstudents.org/favicon.ico",
+        "description": "A resource for students to learn about the latest scientific developments."
+    },
+    {
+        "name": "Gimkit",
+        "url": "https://www.gimkit.com/",
+        "icon": "https://www.gimkit.com/favicon.ico",
+        "description": "An educational game show platform for learning via quizzes."
     }
 ]

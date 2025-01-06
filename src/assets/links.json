@@ -18,12 +18,6 @@
         "description": "Free typing practice and lessons."
     },
     {
-        "name": "World's Biggest Pac-Man",
-        "url": "https://www.pacman.com/",
-        "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQniwmb0znE1RjYw9h3IwqYkWyYxIzyRC2hGw&s",
-        "description": "User-generated Pac-Man levels."
-    },
-    {
         "name": "Sporcle",
         "url": "https://www.sporcle.com/",
         "icon": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Sporcle_June_8_2022_Logo.png",
@@ -34,12 +28,6 @@
         "url": "https://www.incredibox.com/",
         "icon": "https://static.wikia.nocookie.net/incredibox/images/c/ca/Official_app_icon.png/revision/latest?cb=20220410203947",
         "description": "Create music by mixing beats."
-    },
-    {
-        "name": "The Secret Door",
-        "url": "http://www.thesecretdoor.com/",
-        "icon": "http://www.thesecretdoor.com/favicon.ico",
-        "description": "Travel to random locations virtually."
     },
     {
         "name": "JigZone",
@@ -84,12 +72,6 @@
         "description": "Create graphic designs online."
     },
     {
-        "name": "Kongregate",
-        "url": "https://www.kongregate.com/",
-        "icon": "https://www.kongregate.com/favicon.ico",
-        "description": "Play a variety of free games."
-    },
-    {
         "name": "Pixel Art Maker",
         "url": "https://www.pixelartmaker.com/",
         "icon": "https://www.pixelartmaker.com/favicon.ico",
@@ -100,12 +82,6 @@
         "url": "https://boardgamearena.com/",
         "icon": "https://boardgamearena.com/favicon.ico",
         "description": "Play board games online."
-    },
-    {
-        "name": "Blooket",
-        "url": "https://www.blooket.com/",
-        "icon": "https://www.blooket.com/favicon.ico",
-        "description": "Fun quizzes for learning."
     },
     {
         "name": "Slither.io",
@@ -156,12 +132,6 @@
         "description": "Quiz for charity."
     },
     {
-        "name": "World Geography Games",
-        "url": "https://world-geography-games.com/",
-        "icon": "https://world-geography-games.com/favicon.ico",
-        "description": "Engaging geography games."
-    },
-    {
         "name": "Zooniverse",
         "url": "https://www.zooniverse.org/",
         "icon": "https://www.zooniverse.org/favicon.ico",
@@ -172,12 +142,6 @@
         "url": "https://quizlet.com/",
         "icon": "https://quizlet.com/favicon.ico",
         "description": "Flashcards and study games."
-    },
-    {
-        "name": "Catflix",
-        "url": "https://catflix.su",
-        "icon": "https://catflix.su/favicon.ico",
-        "description": "Free movie and series streaming."
     },
     {
         "name": "Kizi",
@@ -196,12 +160,6 @@
         "url": "https://freemath.org/",
         "icon": "https://freemath.org/favicon.ico",
         "description": "Free online math practice."
-    },
-    {
-        "name": "Animal Crossing: Pocket Camp",
-        "url": "https://ac-pocketcamp.com/",
-        "icon": "https://ac-pocketcamp.com/favicon.ico",
-        "description": "Build a campsite in this mobile game."
     },
     {
         "name": "Online-Convert",
@@ -274,5 +232,107 @@
         "url": "https://www.gimkit.com/",
         "icon": "https://www.gimkit.com/favicon.ico",
         "description": "Quiz-based educational platform."
+    },
+    {
+        "name": "Eloquence",
+        "url": "https://eloquenceapp.com/",
+        "icon": "https://eloquenceapp.com/favicon.ico",
+        "description": "Build communication skills with AI-powered tools."
+    },
+    {
+        "name": "Twitch",
+        "url": "https://www.twitch.tv/",
+        "icon": "https://www.twitch.tv/favicon.ico",
+        "description": "Stream and watch live gaming broadcasts."
+    },
+    {
+        "name": "Drawful 2",
+        "url": "https://jackboxgames.com/drawful-2/",
+        "icon": "https://jackboxgames.com/wp-content/uploads/2017/06/Drawful2_Logo.png",
+        "description": "A hilarious drawing and guessing game."
+    },
+    {
+        "name": "Duolingo",
+        "url": "https://www.duolingo.com/",
+        "icon": "https://www.duolingo.com/favicon.ico",
+        "description": "Learn languages through interactive lessons."
+    },
+    {
+        "name": "Mathway",
+        "url": "https://www.mathway.com/",
+        "icon": "https://www.mathway.com/favicon.ico",
+        "description": "Solve math problems instantly."
+    },
+    {
+        "name": "Kongregate",
+        "url": "https://www.kongregate.com/",
+        "icon": "https://www.kongregate.com/favicon.ico",
+        "description": "Browse and play free online games."
+    },
+    {
+        "name": "Catflix.su",
+        "url": "https://catflix.su/",
+        "icon": "https://catflix.su/favicon.ico",
+        "description": "Watch movies and shows for free."
+    },
+    {
+        "name": "Super Mario Bros",
+        "url": "https://www.playmario.com/",
+        "icon": "https://playmario.com/favicon.ico",
+        "description": "Play the classic Super Mario game online."
+    },
+    {
+        "name": "Google Arts & Culture",
+        "url": "https://artsandculture.google.com/",
+        "icon": "https://artsandculture.google.com/favicon.ico",
+        "description": "Explore art collections, museums, and exhibits."
+    },
+    {
+        "name": "Fidget Spinner",
+        "url": "http://fidgetspinner.io/",
+        "icon": "http://fidgetspinner.io/favicon.ico",
+        "description": "Virtual fidget spinner you can spin online."
+    },
+    {
+        "name": "Twitch Plays Pokémon",
+        "url": "https://www.twitch.tv/twitchplayspokemon",
+        "icon": "https://www.twitch.tv/favicon.ico",
+        "description": "A social experiment where Twitch chat controls a game of Pokémon."
+    },
+    {
+        "name": "This is Sand",
+        "url": "https://thisissand.com/",
+        "icon": "https://thisissand.com/favicon.ico",
+        "description": "Create art using virtual sand."
+    },
+    {
+        "name": "Teddy Ruxpin",
+        "url": "https://www.teddyruxpin.com/",
+        "icon": "https://www.teddyruxpin.com/favicon.ico",
+        "description": "The original storytelling bear."
+    },
+    {
+        "name": "Smasher",
+        "url": "http://www.smasher.co/",
+        "icon": "http://www.smasher.co/favicon.ico",
+        "description": "Break things, smash and create chaos online!"
+    },
+    {
+        "name": "Akinator",
+        "url": "https://en.akinator.com/",
+        "icon": "https://en.akinator.com/favicon.ico",
+        "description": "Play the guessing game with an online genius."
+    },
+    {
+        "name": "Draw Your Story",
+        "url": "https://www.drawyourstory.com/",
+        "icon": "https://www.drawyourstory.com/favicon.ico",
+        "description": "Create your own comic story by drawing."
+    },
+    {
+        "name": "Nyan Cat",
+        "url": "http://www.nyan.cat/",
+        "icon": "http://www.nyan.cat/favicon.ico",
+        "description": "Enjoy endless Nyan Cat animations and music."
     }
 ]

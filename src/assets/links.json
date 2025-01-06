@@ -2,37 +2,37 @@
     {
         "name": "Little Alchemy 2",
         "url": "https://littlealchemy2.com/",
-        "icon": "https://littlealchemy2.com/assets/favicon.ico",
+        "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9n9vk3dWXd3L3pfOQQcyUwuFyKavvWyRGKA&s",
         "description": "Combine elements to create new items."
     },
     {
         "name": "GeoGuessr",
         "url": "https://www.geoguessr.com/",
-        "icon": "https://www.geoguessr.com/favicon.ico",
+        "icon": "https://cdn.mos.cms.futurecdn.net/Mj53EQZCtcpyNyU6pdYPqX-1200-80.jpg",
         "description": "Guess locations on Google Street View."
     },
     {
         "name": "TypingClub",
         "url": "https://www.typingclub.com/",
-        "icon": "https://www.typingclub.com/favicon.ico",
+        "icon": "https://my.barton.ac.uk/digital/wp-content/uploads/sites/4/2021/05/TypingClub.png",
         "description": "Free typing practice and lessons."
     },
     {
         "name": "World's Biggest Pac-Man",
         "url": "https://www.pacman.com/",
-        "icon": "https://www.pacman.com/favicon.ico",
+        "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQniwmb0znE1RjYw9h3IwqYkWyYxIzyRC2hGw&s",
         "description": "User-generated Pac-Man levels."
     },
     {
         "name": "Sporcle",
         "url": "https://www.sporcle.com/",
-        "icon": "https://www.sporcle.com/favicon.ico",
+        "icon": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Sporcle_June_8_2022_Logo.png",
         "description": "Quizzes on various topics."
     },
     {
         "name": "Incredibox",
         "url": "https://www.incredibox.com/",
-        "icon": "https://www.incredibox.com/favicon.ico",
+        "icon": "https://static.wikia.nocookie.net/incredibox/images/c/ca/Official_app_icon.png/revision/latest?cb=20220410203947",
         "description": "Create music by mixing beats."
     },
     {

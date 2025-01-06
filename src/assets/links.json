@@ -2,73 +2,73 @@
     {
         "name": "Little Alchemy 2",
         "url": "https://littlealchemy2.com/",
-        "icon": "https://littlealchemy2.com/assets/icon.png",
+        "icon": "https://littlealchemy2.com/assets/favicon.ico",
         "description": "Combine elements to create new items."
     },
     {
         "name": "GeoGuessr",
         "url": "https://www.geoguessr.com/",
-        "icon": "https://www.geoguessr.com/logo.png",
+        "icon": "https://www.geoguessr.com/favicon.ico",
         "description": "Guess locations on Google Street View."
     },
     {
         "name": "TypingClub",
         "url": "https://www.typingclub.com/",
-        "icon": "https://www.typingclub.com/logo.png",
+        "icon": "https://www.typingclub.com/favicon.ico",
         "description": "Free typing practice and lessons."
     },
     {
         "name": "World's Biggest Pac-Man",
         "url": "https://www.pacman.com/",
-        "icon": "https://www.pacman.com/icon.png",
+        "icon": "https://www.pacman.com/favicon.ico",
         "description": "User-generated Pac-Man levels."
     },
     {
         "name": "Sporcle",
         "url": "https://www.sporcle.com/",
-        "icon": "https://www.sporcle.com/logo.png",
+        "icon": "https://www.sporcle.com/favicon.ico",
         "description": "Quizzes on various topics."
     },
     {
         "name": "Incredibox",
         "url": "https://www.incredibox.com/",
-        "icon": "https://www.incredibox.com/logo.png",
+        "icon": "https://www.incredibox.com/favicon.ico",
         "description": "Create music by mixing beats."
     },
     {
         "name": "The Secret Door",
         "url": "http://www.thesecretdoor.com/",
-        "icon": "http://www.thesecretdoor.com/icon.png",
+        "icon": "http://www.thesecretdoor.com/favicon.ico",
         "description": "Travel to random locations virtually."
     },
     {
         "name": "JigZone",
         "url": "https://www.jigzone.com/",
-        "icon": "https://www.jigzone.com/icon.png",
+        "icon": "https://www.jigzone.com/favicon.ico",
         "description": "Online jigsaw puzzles."
     },
     {
         "name": "CardGames.io",
         "url": "https://cardgames.io/",
-        "icon": "https://cardgames.io/logo.png",
+        "icon": "https://cardgames.io/favicon.ico",
         "description": "Classic card games online."
     },
     {
         "name": "Little Big Snake",
         "url": "https://littlebigsnake.com/",
-        "icon": "https://littlebigsnake.com/icon.png",
+        "icon": "https://littlebigsnake.com/favicon.ico",
         "description": "Multiplayer snake game."
     },
     {
         "name": "Catan Universe",
         "url": "https://catanuniverse.com/",
-        "icon": "https://catanuniverse.com/logo.png",
+        "icon": "https://catanuniverse.com/favicon.ico",
         "description": "Play Catan online."
     },
     {
         "name": "Chess.com",
         "url": "https://www.chess.com/",
-        "icon": "https://www.chess.com/logo.png",
+        "icon": "https://www.chess.com/favicon.ico",
         "description": "Play chess online."
     },
     {

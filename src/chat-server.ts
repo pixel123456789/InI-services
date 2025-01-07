@@ -120,7 +120,7 @@ function broadcastToRoom(roomId: string, message: any) {
   const room = rooms.find(r => r.id === roomId);
   if (!room) return;
 
-  wss.clients.forEach(client => {
+ wss.clients.forEach((client: WebSocket) => {
     if (client.readyState === WebSocket.OPEN) {
       const userData = clients.get(client);
       if (userData && room.users.includes(userData.userId)) {

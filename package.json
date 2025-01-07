@@ -36,8 +36,9 @@
     "react-i18next": "^15.0.1",
     "tsx": "^4.17.0",
     "vite-plugin-minify": "^2.0.0",
+    "ws": "^8.14.0",
     "zod": "^3.23.8",
-    "pnpm":"^2.1.0"
+    "pnpm": "^2.1.0"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.9.0",

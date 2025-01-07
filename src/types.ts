@@ -1,9 +1,8 @@
-// Auth Types
 export interface UserAccount {
   id: string;
   username: string;
   email: string;
-  password: string; // Hashed
+  password: string;
   avatar?: string;
   createdAt: Date;
   lastSeen: Date;
@@ -19,7 +18,6 @@ export interface UserAccount {
   };
 }
 
-// Chat Types
 export interface ChatMessage {
   id: string;
   userId: string;

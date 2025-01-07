@@ -4,6 +4,12 @@ import bcrypt from 'bcrypt';
 import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 
+declare module 'express-session' {
+  interface SessionData {
+    userId: string;
+  }
+}
+
 const prisma = new PrismaClient();
 const app = express();
 
@@ -33,6 +39,32 @@ const requireAuth = (req: express.Request, res: express.Response, next: express.
 };
 
 // Auth routes
+app.post('/api/auth/register', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const existingUser = await prisma.user.findUnique({ where: { username } });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Username already exists' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await prisma.user.create({
+      data: {
+        username,
+        password: hashedPassword,
+        status: 'online'
+      }
+    });
+
+    req.session.userId = user.id;
+    const { password: _, ...userWithoutPassword } = user;
+    res.status(201).json(userWithoutPassword);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 app.post('/api/auth/login', async (req, res) => {
   const { username, password } = req.body;
 
@@ -47,8 +79,12 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { status: 'online', lastSeen: new Date() }
+    });
+
     req.session.userId = user.id;
-    
     const { password: _, ...userWithoutPassword } = user;
     res.json(userWithoutPassword);
   } catch (error) {
@@ -56,10 +92,19 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-app.post('/api/auth/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.status(200).json({ message: 'Logged out successfully' });
-  });
+app.post('/api/auth/logout', requireAuth, async (req, res) => {
+  try {
+    await prisma.user.update({
+      where: { id: req.session.userId },
+      data: { status: 'offline', lastSeen: new Date() }
+    });
+
+    req.session.destroy(() => {
+      res.status(200).json({ message: 'Logged out successfully' });
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
 });
 
 app.get('/api/auth/me', requireAuth, async (req, res) => {

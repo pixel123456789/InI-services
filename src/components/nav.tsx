@@ -48,12 +48,7 @@ function Nav() {
                     <span class="font-bold sr-only sm:not-sr-only">{t("Links")}</span>
                   </Button>
                 </Link>
-                <Link href="/chat">
-                <Button active={true}>
-                    <ChatIcon />
-                    <span class="font-bold sr-only sm:not-sr-only">Chat</span>
-                </Button>
-                </Link>
+                
             </div>
         </nav>
     )

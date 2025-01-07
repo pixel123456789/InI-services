@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "preact/hooks";
-import { Button } from "../interface/button";
 import { AppState, UserAccount, ChatMessage, defaultStyles } from '../types';
 
 const MOCK_USERS: UserAccount[] = [
@@ -66,7 +65,6 @@ export function Chat() {
 
   // UI state
   const [inputMessage, setInputMessage] = useState("");
-  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [showUserList, setShowUserList] = useState(false);
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
   const [showModeration, setShowModeration] = useState(false);

@@ -11,7 +11,7 @@ import { Error } from "./pages/error";
 import { Nav } from "./components/nav";
 import { Footer } from "./components/footer";
 import { Links } from "./pages/links";
-
+import { Chat } from "./pages/chat";
 import "./util/locale";
 import "./style/index.css";
 
@@ -31,6 +31,7 @@ function App() {
 										<Route path="/settings/appearance" component={Settings} />
 										<Route path="/settings/locale" component={Settings} />
 										<Route path="/privacy" component={Privacy} />
+										<Route path="/chat" component={Chat} />
 										<Route default component={Error} />
 								</Router>
 						</main>

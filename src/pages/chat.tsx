@@ -1,13 +1,8 @@
 import { useState, useEffect, useRef } from "preact/hooks";
-import { Head } from "../components/head";
-import { Obfuscated } from "../util/obfuscate";
 import { Button } from "../interface/button";
-import { AppState, UserAccount, ChatMessage, ChatRoom } from './types';
-import { createBrowserHistory } from 'history';
+import { AppState, UserAccount, ChatMessage } from '../types';
 
-const history = createBrowserHistory();
-
-function App() {
+export function Chat() {
   // Core state
   const [state, setState] = useState<AppState>(() => {
     const savedState = localStorage.getItem('metallic/app-state');
@@ -32,7 +27,6 @@ function App() {
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [showUserList, setShowUserList] = useState(false);
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
-  const [registerForm, setRegisterForm] = useState({ username: '', email: '', password: '' });
 
   // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -47,14 +41,17 @@ function App() {
   const login = async (e: Event) => {
     e.preventDefault();
     try {
-      setState(prev => ({ ...prev, auth: { ...prev.auth, isLoading: true, error: null } }));
+      setState((prev: AppState) => ({ 
+        ...prev, 
+        auth: { ...prev.auth, isLoading: true, error: null } 
+      }));
       
       // Mock login - replace with real API call
       const mockUser: UserAccount = {
         id: Math.random().toString(36).slice(2),
         username: loginForm.email.split('@')[0],
         email: loginForm.email,
-        password: loginForm.password, // Should be hashed
+        password: loginForm.password,
         createdAt: new Date(),
         lastSeen: new Date(),
         status: 'online',
@@ -69,7 +66,7 @@ function App() {
         }
       };
 
-      setState(prev => ({
+      setState((prev: AppState) => ({
         ...prev,
         auth: {
           user: mockUser,
@@ -78,10 +75,8 @@ function App() {
           error: null
         }
       }));
-
-      history.push('/chat');
     } catch (error) {
-      setState(prev => ({
+      setState((prev: AppState) => ({
         ...prev,
         auth: {
           ...prev.auth,
@@ -92,13 +87,8 @@ function App() {
     }
   };
 
-  const register = async (e: Event) => {
-    e.preventDefault();
-    // Similar to login but with registration logic
-  };
-
   const logout = () => {
-    setState(prev => ({
+    setState((prev: AppState) => ({
       ...prev,
       auth: {
         user: null,
@@ -107,7 +97,6 @@ function App() {
         error: null
       }
     }));
-    history.push('/login');
   };
 
   // Chat methods
@@ -125,7 +114,7 @@ function App() {
     };
 
     chatChannel.current.postMessage({ type: 'NEW_MESSAGE', data: newMessage });
-    setState(prev => ({
+    setState((prev: AppState) => ({
       ...prev,
       chat: {
         ...prev.chat,
@@ -135,11 +124,11 @@ function App() {
   };
 
   const handleMessageEdit = (messageId: string, newContent: string) => {
-    setState(prev => ({
+    setState((prev: AppState) => ({
       ...prev,
       chat: {
         ...prev.chat,
-        messages: prev.chat.messages.map(msg =>
+        messages: prev.chat.messages.map((msg: ChatMessage) =>
           msg.id === messageId
             ? { ...msg, content: newContent, edited: true, editedAt: new Date() }
             : msg
@@ -151,11 +140,11 @@ function App() {
 
   const handleReaction = (messageId: string, emoji: string) => {
     if (!state.auth.user) return;
-    setState(prev => ({
+    setState((prev: AppState) => ({
       ...prev,
       chat: {
         ...prev.chat,
-        messages: prev.chat.messages.map(msg =>
+        messages: prev.chat.messages.map((msg: ChatMessage) =>
           msg.id === messageId
             ? {
                 ...msg,
@@ -215,56 +204,46 @@ function App() {
     return (
       <div class="auth-container">
         <h1>Welcome to Chat</h1>
-        <div class="auth-forms">
-          {/* Login Form */}
-          <form onSubmit={login}>
-            <h2>Login</h2>
-            <input
-              type="email"
-              placeholder="Email"
-              value={loginForm.email}
-              onChange={(e) => setLoginForm(prev => ({
-                ...prev,
-                email: (e.target as HTMLInputElement).value
-              }))}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={loginForm.password}
-              onChange={(e) => setLoginForm(prev => ({
-                ...prev,
-                password: (e.target as HTMLInputElement).value
-              }))}
-            />
-            <Button type="submit">Login</Button>
-          </form>
-
-          {/* Register Form */}
-          <form onSubmit={register}>
-            <h2>Register</h2>
-            {/* Similar to login form */}
-          </form>
-        </div>
+        <form onSubmit={login}>
+          <h2>Login</h2>
+          <input
+            type="email"
+            placeholder="Email"
+            value={loginForm.email}
+            onChange={(e) => setLoginForm(prev => ({
+              ...prev,
+              email: (e.target as HTMLInputElement).value
+            }))}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={loginForm.password}
+            onChange={(e) => setLoginForm(prev => ({
+              ...prev,
+              password: (e.target as HTMLInputElement).value
+            }))}
+          />
+          <Button type="submit">Login</Button>
+        </form>
       </div>
     );
   }
 
   return (
     <div class="chat-container">
-      {/* Sidebar */}
       <div class="sidebar">
         <div class="user-profile">
-          <img src={state.auth.user?.avatar || '/default-avatar.png'} />
+          <img src={state.auth.user?.avatar || '/default-avatar.png'} alt="Profile" />
           <h3>{state.auth.user?.username}</h3>
           <Button onClick={logout}>Logout</Button>
         </div>
 
         <div class="room-list">
-          {state.chat.rooms.map(room => (
+          {state.chat.rooms.map((room) => (
             <div
               key={room.id}
-              onClick={() => setState(prev => ({
+              onClick={() => setState((prev: AppState) => ({
                 ...prev,
                 chat: { ...prev.chat, currentRoom: room }
               }))}
@@ -280,22 +259,19 @@ function App() {
         </div>
       </div>
 
-      {/* Main Chat Area */}
       <div class="chat-main">
         {state.chat.currentRoom ? (
           <>
             <div class="chat-header">
               <h2>{state.chat.currentRoom.name}</h2>
-              <div class="header-actions">
-                <Button onClick={() => setShowUserList(!showUserList)}>
-                  Users ({state.chat.currentRoom.members.length})
-                </Button>
-              </div>
+              <Button onClick={() => setShowUserList(!showUserList)}>
+                Users ({state.chat.currentRoom.members.length})
+              </Button>
             </div>
 
             <div class="messages-container">
               {state.chat.messages
-                .filter(msg => msg.roomId === state.chat.currentRoom?.id)
+                .filter((msg: ChatMessage) => msg.roomId === state.chat.currentRoom?.id)
                 .map(renderMessage)}
               <div ref={messagesEndRef} />
             </div>
@@ -321,14 +297,13 @@ function App() {
         )}
       </div>
 
-      {/* User List Sidebar */}
       {showUserList && state.chat.currentRoom && (
         <div class="users-sidebar">
           <h3>Users</h3>
-          {state.chat.currentRoom.members.map(userId => {
+          {state.chat.currentRoom.members.map((userId: string) => {
             const user = state.chat.rooms
-              .flatMap(r => r.members)
-              .find(u => u === userId);
+              .flatMap((r) => r.members)
+              .find((u: string) => u === userId);
             return (
               <div key={userId} class="user-item">
                 {user}
@@ -340,5 +315,3 @@ function App() {
     </div>
   );
 }
-
-export { App };

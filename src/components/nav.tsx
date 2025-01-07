@@ -8,7 +8,6 @@ import { GamesIcon } from "../assets/gamesIcon";
 import { LinksIcon } from "../assets/linkIcon.tsx";
 import { SettingsIcon } from "../assets/settingsIcon";
 import { Obfuscated } from '../util/obfuscate';
-import { ChatIcon } from "../assets/chatIcon";
 function Nav() {
     const { t } = useTranslation();
 

@@ -3,6 +3,23 @@ import { UserAccount } from '../types';
 class AuthService {
   private static API_URL = '/api/auth';
 
+  static async register(username: string, password: string): Promise<UserAccount> {
+    const response = await fetch(`${this.API_URL}/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Registration failed');
+    }
+
+    return response.json();
+  }
+
   static async login(username: string, password: string): Promise<UserAccount> {
     const response = await fetch(`${this.API_URL}/login`, {
       method: 'POST',

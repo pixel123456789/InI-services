@@ -1,6 +1,27 @@
 import { useState, useEffect, useRef } from "preact/hooks";
 import { Button } from "../interface/button";
-import { AppState, UserAccount, ChatMessage } from '../types';
+import { AppState, UserAccount, ChatMessage, defaultStyles } from '../types';
+
+const MOCK_USERS: UserAccount[] = [
+  {
+    id: '1',
+    username: 'admin',
+    role: 'admin',
+    createdAt: new Date(),
+    lastSeen: new Date(),
+    status: 'online',
+    friends: [],
+    blockedUsers: [],
+    settings: {
+      theme: 'dark',
+      notifications: true,
+      soundEffects: true,
+      messagePreview: true,
+      language: 'en'
+    }
+  },
+  // Add more mock users as needed
+];
 
 export function Chat() {
   // Core state
@@ -10,11 +31,32 @@ export function Chat() {
       auth: {
         user: null,
         isAuthenticated: false,
-        isLoading: true,
+        isLoading: false,
         error: null
       },
       chat: {
-        rooms: [],
+        rooms: [
+          {
+            id: 'general',
+            name: 'General',
+            type: 'public',
+            createdBy: '1',
+            createdAt: new Date(),
+            members: ['1'],
+            admins: ['1'],
+            moderators: [],
+            lastMessage: null,
+            unreadCount: 0,
+            pinnedMessages: [],
+            settings: {
+              notifications: true,
+              readonly: false,
+              allowReactions: true,
+              allowPins: true,
+              allowEdits: true,
+            }
+          }
+        ],
         currentRoom: null,
         messages: [],
         typingUsers: []
@@ -26,50 +68,33 @@ export function Chat() {
   const [inputMessage, setInputMessage] = useState("");
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [showUserList, setShowUserList] = useState(false);
-  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+  const [loginForm, setLoginForm] = useState({ username: '', password: '' });
+  const [showModeration, setShowModeration] = useState(false);
 
   // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatChannel = useRef<BroadcastChannel>(new BroadcastChannel('metallic/chat'));
+
+  // Auto-scroll effect
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [state.chat.messages]);
 
   // Persistence
   useEffect(() => {
     localStorage.setItem('metallic/app-state', JSON.stringify(state));
   }, [state]);
 
-  // Auth methods
   const login = async (e: Event) => {
     e.preventDefault();
     try {
-      setState((prev: AppState) => ({ 
-        ...prev, 
-        auth: { ...prev.auth, isLoading: true, error: null } 
-      }));
-      
-      // Mock login - replace with real API call
-      const mockUser: UserAccount = {
-        id: Math.random().toString(36).slice(2),
-        username: loginForm.email.split('@')[0],
-        email: loginForm.email,
-        password: loginForm.password,
-        createdAt: new Date(),
-        lastSeen: new Date(),
-        status: 'online',
-        friends: [],
-        blockedUsers: [],
-        settings: {
-          theme: 'system',
-          notifications: true,
-          soundEffects: true,
-          messagePreview: true,
-          language: 'en'
-        }
-      };
+      const user = MOCK_USERS.find(u => u.username === loginForm.username);
+      if (!user) throw new Error('User not found');
 
       setState((prev: AppState) => ({
         ...prev,
         auth: {
-          user: mockUser,
+          user,
           isAuthenticated: true,
           isLoading: false,
           error: null
@@ -99,7 +124,28 @@ export function Chat() {
     }));
   };
 
-  // Chat methods
+  const handleMessageModeration = (messageId: string, action: 'delete' | 'warn' | 'ban') => {
+    if (!state.auth.user || !['admin', 'moderator'].includes(state.auth.user.role)) return;
+
+    setState((prev: AppState) => ({
+      ...prev,
+      chat: {
+        ...prev.chat,
+        messages: prev.chat.messages.map((msg: ChatMessage) =>
+          msg.id === messageId
+            ? {
+                ...msg,
+                isModerated: true,
+                moderatedBy: state.auth.user!.id,
+                moderationReason: action,
+                type: action === 'delete' ? 'deleted' : 'moderation'
+              }
+            : msg
+        )
+      }
+    }));
+  };
+
   const sendMessage = (content: string) => {
     if (!content.trim() || !state.auth.user || !state.chat.currentRoom) return;
 
@@ -123,97 +169,72 @@ export function Chat() {
     }));
   };
 
-  const handleMessageEdit = (messageId: string, newContent: string) => {
-    setState((prev: AppState) => ({
-      ...prev,
-      chat: {
-        ...prev.chat,
-        messages: prev.chat.messages.map((msg: ChatMessage) =>
-          msg.id === messageId
-            ? { ...msg, content: newContent, edited: true, editedAt: new Date() }
-            : msg
-        )
-      }
-    }));
-    setEditingMessageId(null);
-  };
-
-  const handleReaction = (messageId: string, emoji: string) => {
-    if (!state.auth.user) return;
-    setState((prev: AppState) => ({
-      ...prev,
-      chat: {
-        ...prev.chat,
-        messages: prev.chat.messages.map((msg: ChatMessage) =>
-          msg.id === messageId
-            ? {
-                ...msg,
-                reactions: {
-                  ...msg.reactions,
-                  [emoji]: [...(msg.reactions?.[emoji] || []), state.auth.user!.id]
-                }
-              }
-            : msg
-        )
-      }
-    }));
-  };
-
-  // Render methods
   const renderMessage = (msg: ChatMessage) => {
     const isCurrentUser = msg.userId === state.auth.user?.id;
+    const isAdmin = state.auth.user?.role === 'admin';
+    const isModerator = state.auth.user?.role === 'moderator';
+    const canModerate = isAdmin || isModerator;
     
     return (
-      <div key={msg.id} class={`message ${isCurrentUser ? 'sent' : 'received'}`}>
-        <div class="message-content">
-          {editingMessageId === msg.id ? (
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              const input = (e.target as HTMLFormElement).querySelector('input');
-              if (input) handleMessageEdit(msg.id, input.value);
-            }}>
-              <input 
-                type="text" 
-                defaultValue={msg.content}
-                class="edit-input"
-              />
-            </form>
+      <div 
+        key={msg.id} 
+        style={{
+          ...defaultStyles.message,
+          ...(isCurrentUser ? defaultStyles.messageSent : defaultStyles.messageReceived),
+          ...(msg.isModerated && { opacity: 0.7 })
+        }}
+      >
+        <div style={defaultStyles.messageContent}>
+          {msg.type === 'deleted' ? (
+            <i style={{ color: '#666' }}>Message deleted</i>
           ) : (
             <>
-              <div class="message-text">{msg.content}</div>
-              <div class="message-meta">
-                {msg.edited && <span>(edited)</span>}
-                <span>{new Date(msg.timestamp).toLocaleTimeString()}</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <strong>{msg.userId}</strong>
+                {canModerate && (
+                  <div style={{ display: 'flex', gap: '5px' }}>
+                    <button 
+                      onClick={() => handleMessageModeration(msg.id, 'delete')}
+                      style={defaultStyles.button}
+                    >
+                      🗑️
+                    </button>
+                    <button 
+                      onClick={() => handleMessageModeration(msg.id, 'warn')}
+                      style={defaultStyles.button}
+                    >
+                      ⚠️
+                    </button>
+                  </div>
+                )}
               </div>
-              <div class="reactions">
-                {['👍', '❤️', '😂', '😮', '😢', '😡'].map(emoji => (
-                  <button onClick={() => handleReaction(msg.id, emoji)}>
-                    {emoji} {msg.reactions?.[emoji]?.length || ''}
-                  </button>
-                ))}
-              </div>
+              {msg.content}
             </>
           )}
+          <div style={defaultStyles.messageMeta}>
+            {new Date(msg.timestamp).toLocaleTimeString()}
+            {msg.edited && ' (edited)'}
+            {msg.isModerated && ` (moderated by ${msg.moderatedBy})`}
+          </div>
         </div>
       </div>
     );
   };
 
-  // Main render
   if (!state.auth.isAuthenticated) {
     return (
-      <div class="auth-container">
-        <h1>Welcome to Chat</h1>
-        <form onSubmit={login}>
-          <h2>Login</h2>
+      <div style={defaultStyles.authContainer}>
+        <form onSubmit={login} style={defaultStyles.authForm}>
+          <h2 style={{ textAlign: 'center' }}>Login to Chat</h2>
           <input
-            type="email"
-            placeholder="Email"
-            value={loginForm.email}
+            type="text"
+            placeholder="Username"
+            value={loginForm.username}
             onChange={(e) => setLoginForm(prev => ({
               ...prev,
-              email: (e.target as HTMLInputElement).value
+              username: (e.target as HTMLInputElement).value
             }))}
+            style={defaultStyles.input}
           />
           <input
             type="password"
@@ -223,23 +244,45 @@ export function Chat() {
               ...prev,
               password: (e.target as HTMLInputElement).value
             }))}
+            style={defaultStyles.input}
           />
-          <Button type="submit">Login</Button>
+          <button type="submit" style={defaultStyles.button}>
+            Login
+          </button>
+          {state.auth.error && (
+            <div style={{ color: '#ff4444', textAlign: 'center' }}>
+              {state.auth.error}
+            </div>
+          )}
         </form>
       </div>
     );
   }
 
   return (
-    <div class="chat-container">
-      <div class="sidebar">
-        <div class="user-profile">
-          <img src={state.auth.user?.avatar || '/default-avatar.png'} alt="Profile" />
-          <h3>{state.auth.user?.username}</h3>
-          <Button onClick={logout}>Logout</Button>
+    <div style={defaultStyles.container}>
+      <div style={defaultStyles.sidebar}>
+        <div style={defaultStyles.userProfile}>
+          <img 
+            src={state.auth.user?.avatar || '/default-avatar.png'} 
+            alt="Profile"
+            style={defaultStyles.avatar}
+          />
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <h3>{state.auth.user?.username}</h3>
+            {state.auth.user?.role === 'admin' && (
+              <span style={defaultStyles.adminBadge}>Admin</span>
+            )}
+            {state.auth.user?.role === 'moderator' && (
+              <span style={defaultStyles.moderatorBadge}>Mod</span>
+            )}
+          </div>
+          <button onClick={logout} style={defaultStyles.button}>
+            Logout
+          </button>
         </div>
 
-        <div class="room-list">
+        <div style={defaultStyles.roomList}>
           {state.chat.rooms.map((room) => (
             <div
               key={room.id}
@@ -247,69 +290,105 @@ export function Chat() {
                 ...prev,
                 chat: { ...prev.chat, currentRoom: room }
               }))}
-              class={`room ${state.chat.currentRoom?.id === room.id ? 'active' : ''}`}
+              style={{
+                ...defaultStyles.room,
+                ...(state.chat.currentRoom?.id === room.id && defaultStyles.activeRoom)
+              }}
             >
               <h4>{room.name}</h4>
-              <div class="last-message">{room.lastMessage?.content}</div>
               {room.unreadCount > 0 && (
-                <div class="unread-badge">{room.unreadCount}</div>
+                <div style={{ 
+                  backgroundColor: '#ff4444',
+                  borderRadius: '50%',
+                  padding: '2px 6px',
+                  fontSize: '12px'
+                }}>
+                  {room.unreadCount}
+                </div>
               )}
             </div>
           ))}
         </div>
       </div>
 
-      <div class="chat-main">
+      <div style={defaultStyles.chatMain}>
         {state.chat.currentRoom ? (
           <>
-            <div class="chat-header">
+            <div style={defaultStyles.chatHeader}>
               <h2>{state.chat.currentRoom.name}</h2>
-              <Button onClick={() => setShowUserList(!showUserList)}>
-                Users ({state.chat.currentRoom.members.length})
-              </Button>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                {(state.auth.user?.role === 'admin' || state.auth.user?.role === 'moderator') && (
+                  <button 
+                    onClick={() => setShowModeration(!showModeration)}
+                    style={defaultStyles.button}
+                  >
+                    Moderation
+                  </button>
+                )}
+                <button 
+                  onClick={() => setShowUserList(!showUserList)}
+                  style={defaultStyles.button}
+                >
+                  Users ({state.chat.currentRoom.members.length})
+                </button>
+              </div>
             </div>
 
-            <div class="messages-container">
+            <div style={defaultStyles.messagesContainer}>
               {state.chat.messages
                 .filter((msg: ChatMessage) => msg.roomId === state.chat.currentRoom?.id)
                 .map(renderMessage)}
               <div ref={messagesEndRef} />
             </div>
 
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              sendMessage(inputMessage);
-              setInputMessage("");
-            }}>
+            <div style={defaultStyles.inputContainer}>
               <input
                 type="text"
                 value={inputMessage}
                 onChange={(e) => setInputMessage((e.target as HTMLInputElement).value)}
                 placeholder="Type a message..."
+                style={defaultStyles.input}
               />
-              <Button type="submit">Send</Button>
-            </form>
+              <button 
+                onClick={(e) => {
+                  e.preventDefault();
+                  sendMessage(inputMessage);
+                  setInputMessage("");
+                }}
+                style={defaultStyles.button}
+              >
+                Send
+              </button>
+            </div>
           </>
         ) : (
-          <div class="no-room-selected">
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            height: '100%' 
+          }}>
             Select a room to start chatting
           </div>
         )}
       </div>
 
       {showUserList && state.chat.currentRoom && (
-        <div class="users-sidebar">
+        <div style={{
+          width: '200px',
+          backgroundColor: '#2d2d2d',
+          borderLeft: '1px solid #404040',
+          padding: '20px'
+        }}>
           <h3>Users</h3>
-          {state.chat.currentRoom.members.map((userId: string) => {
-            const user = state.chat.rooms
-              .flatMap((r) => r.members)
-              .find((u: string) => u === userId);
-            return (
-              <div key={userId} class="user-item">
-                {user}
-              </div>
-            );
-          })}
+          {state.chat.currentRoom.members.map((userId: string) => (
+            <div key={userId} style={{
+              padding: '10px',
+              borderBottom: '1px solid #404040'
+            }}>
+              {userId}
+            </div>
+          ))}
         </div>
       )}
     </div>

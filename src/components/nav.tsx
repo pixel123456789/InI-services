@@ -8,7 +8,7 @@ import { GamesIcon } from "../assets/gamesIcon";
 import { LinksIcon } from "../assets/linkIcon.tsx";
 import { SettingsIcon } from "../assets/settingsIcon";
 import { Obfuscated } from '../util/obfuscate';
-
+import { ChatIcon } from "../assets/chatIcon";
 function Nav() {
     const { t } = useTranslation();
 
@@ -47,6 +47,12 @@ function Nav() {
                       <LinksIcon />
                     <span class="font-bold sr-only sm:not-sr-only">{t("Links")}</span>
                   </Button>
+                </Link>
+                <Link href="/chat">
+                <Button active={true}>
+                    <ChatIcon />
+                    <span class="font-bold sr-only sm:not-sr-only">Chat</span>
+                </Button>
                 </Link>
             </div>
         </nav>

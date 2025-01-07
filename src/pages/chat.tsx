@@ -1,298 +1,344 @@
 import { useState, useEffect, useRef } from "preact/hooks";
-import { useGlobalState } from "@ekwoka/preact-global-state";
 import { Head } from "../components/head";
 import { Obfuscated } from "../util/obfuscate";
 import { Button } from "../interface/button";
+import { AppState, UserAccount, ChatMessage, ChatRoom } from './types';
+import { createBrowserHistory } from 'history';
 
-interface Message {
-  id: string;
-  user: string;
-  content: string;
-  timestamp: Date;
-  type: 'text' | 'system' | 'reaction';
-  reactions?: { [emoji: string]: string[] };
-}
+const history = createBrowserHistory();
 
-interface User {
-  id: string;
-  username: string;
-  status: 'online' | 'away' | 'offline';
-  lastSeen: Date;
-}
-
-function Chat() {
-  const [theme] = useGlobalState<string>(
-    "theme",
-    localStorage.getItem("metallic/theme") || "default"
-  );
-  const [messages, setMessages] = useState<Message[]>(() => {
-    const saved = localStorage.getItem('metallic/chat-messages');
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [users, setUsers] = useState<User[]>(() => {
-    const saved = localStorage.getItem('metallic/chat-users');
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [inputMessage, setInputMessage] = useState("");
-  const [username, setUsername] = useState("");
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [typingUsers, setTypingUsers] = useState<string[]>([]);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const chatChannel = useRef<BroadcastChannel>(new BroadcastChannel('metallic/chat'));
-  const typingTimeoutRef = useRef<number>();
-
-  useEffect(() => {
-    localStorage.setItem('metallic/chat-messages', JSON.stringify(messages));
-  }, [messages]);
-
-  useEffect(() => {
-    localStorage.setItem('metallic/chat-users', JSON.stringify(users));
-  }, [users]);
-
-  useEffect(() => {
-    chatChannel.current.onmessage = (event) => {
-      const { type, data } = event.data;
-      switch (type) {
-        case 'NEW_MESSAGE':
-          setMessages(prev => [...prev, data]);
-          break;
-        case 'USER_JOIN':
-          setUsers(prev => [...prev, data]);
-          addSystemMessage(`${data.username} has joined the chat`);
-          break;
-        case 'USER_LEAVE':
-          setUsers(prev => prev.filter(u => u.id !== data.id));
-          addSystemMessage(`${data.username} has left the chat`);
-          break;
-        case 'TYPING_START':
-          setTypingUsers(prev => [...new Set([...prev, data])]);
-          break;
-        case 'TYPING_END':
-          setTypingUsers(prev => prev.filter(id => id !== data));
-          break;
-        case 'REACTION':
-          setMessages(prev => prev.map(msg => 
-            msg.id === data.messageId 
-              ? {
-                  ...msg,
-                  reactions: {
-                    ...msg.reactions,
-                    [data.emoji]: [...(msg.reactions?.[data.emoji] || []), data.userId]
-                  }
-                }
-              : msg
-          ));
-          break;
+function App() {
+  // Core state
+  const [state, setState] = useState<AppState>(() => {
+    const savedState = localStorage.getItem('metallic/app-state');
+    return savedState ? JSON.parse(savedState) : {
+      auth: {
+        user: null,
+        isAuthenticated: false,
+        isLoading: true,
+        error: null
+      },
+      chat: {
+        rooms: [],
+        currentRoom: null,
+        messages: [],
+        typingUsers: []
       }
     };
+  });
 
-    return () => chatChannel.current.close();
-  }, []);
+  // UI state
+  const [inputMessage, setInputMessage] = useState("");
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [showUserList, setShowUserList] = useState(false);
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' });
+  const [registerForm, setRegisterForm] = useState({ username: '', email: '', password: '' });
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // Refs
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatChannel = useRef<BroadcastChannel>(new BroadcastChannel('metallic/chat'));
+
+  // Persistence
+  useEffect(() => {
+    localStorage.setItem('metallic/app-state', JSON.stringify(state));
+  }, [state]);
+
+  // Auth methods
+  const login = async (e: Event) => {
+    e.preventDefault();
+    try {
+      setState(prev => ({ ...prev, auth: { ...prev.auth, isLoading: true, error: null } }));
+      
+      // Mock login - replace with real API call
+      const mockUser: UserAccount = {
+        id: Math.random().toString(36).slice(2),
+        username: loginForm.email.split('@')[0],
+        email: loginForm.email,
+        password: loginForm.password, // Should be hashed
+        createdAt: new Date(),
+        lastSeen: new Date(),
+        status: 'online',
+        friends: [],
+        blockedUsers: [],
+        settings: {
+          theme: 'system',
+          notifications: true,
+          soundEffects: true,
+          messagePreview: true,
+          language: 'en'
+        }
+      };
+
+      setState(prev => ({
+        ...prev,
+        auth: {
+          user: mockUser,
+          isAuthenticated: true,
+          isLoading: false,
+          error: null
+        }
+      }));
+
+      history.push('/chat');
+    } catch (error) {
+      setState(prev => ({
+        ...prev,
+        auth: {
+          ...prev.auth,
+          error: 'Login failed',
+          isLoading: false
+        }
+      }));
+    }
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  const register = async (e: Event) => {
+    e.preventDefault();
+    // Similar to login but with registration logic
+  };
 
-  const addSystemMessage = (content: string) => {
-    const systemMessage: Message = {
-      id: Math.random().toString(36).substring(2),
-      user: 'System',
+  const logout = () => {
+    setState(prev => ({
+      ...prev,
+      auth: {
+        user: null,
+        isAuthenticated: false,
+        isLoading: false,
+        error: null
+      }
+    }));
+    history.push('/login');
+  };
+
+  // Chat methods
+  const sendMessage = (content: string) => {
+    if (!content.trim() || !state.auth.user || !state.chat.currentRoom) return;
+
+    const newMessage: ChatMessage = {
+      id: Math.random().toString(36).slice(2),
+      userId: state.auth.user.id,
+      roomId: state.chat.currentRoom.id,
       content,
       timestamp: new Date(),
-      type: 'system'
-    };
-    setMessages(prev => [...prev, systemMessage]);
-  };
-
-  const handleJoin = (e: Event) => {
-    e.preventDefault();
-    if (username.length < 3) return;
-
-    const user: User = {
-      id: Math.random().toString(36).substring(2),
-      username,
-      status: 'online',
-      lastSeen: new Date()
-    };
-
-    setCurrentUser(user);
-    chatChannel.current.postMessage({ type: 'USER_JOIN', data: user });
-  };
-
-  const handleLeave = () => {
-    if (!currentUser) return;
-    chatChannel.current.postMessage({ type: 'USER_LEAVE', data: currentUser });
-    setCurrentUser(null);
-    setUsername("");
-  };
-
-  const handleTyping = () => {
-    if (!currentUser) return;
-    chatChannel.current.postMessage({ type: 'TYPING_START', data: currentUser.id });
-
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
-
-    typingTimeoutRef.current = setTimeout(() => {
-      chatChannel.current.postMessage({ type: 'TYPING_END', data: currentUser.id });
-    }, 3000) as unknown as number;
-  };
-
-  const handleSubmit = (e: Event) => {
-    e.preventDefault();
-    if (!inputMessage.trim() || !currentUser) return;
-
-    const newMessage: Message = {
-      id: Math.random().toString(36).substring(2),
-      user: currentUser.username,
-      content: inputMessage,
-      timestamp: new Date(),
-      type: 'text'
+      type: 'text',
+      readBy: [state.auth.user.id]
     };
 
     chatChannel.current.postMessage({ type: 'NEW_MESSAGE', data: newMessage });
-    setInputMessage("");
+    setState(prev => ({
+      ...prev,
+      chat: {
+        ...prev.chat,
+        messages: [...prev.chat.messages, newMessage]
+      }
+    }));
+  };
+
+  const handleMessageEdit = (messageId: string, newContent: string) => {
+    setState(prev => ({
+      ...prev,
+      chat: {
+        ...prev.chat,
+        messages: prev.chat.messages.map(msg =>
+          msg.id === messageId
+            ? { ...msg, content: newContent, edited: true, editedAt: new Date() }
+            : msg
+        )
+      }
+    }));
+    setEditingMessageId(null);
   };
 
   const handleReaction = (messageId: string, emoji: string) => {
-    if (!currentUser) return;
-    chatChannel.current.postMessage({
-      type: 'REACTION',
-      data: { messageId, userId: currentUser.id, emoji }
-    });
+    if (!state.auth.user) return;
+    setState(prev => ({
+      ...prev,
+      chat: {
+        ...prev.chat,
+        messages: prev.chat.messages.map(msg =>
+          msg.id === messageId
+            ? {
+                ...msg,
+                reactions: {
+                  ...msg.reactions,
+                  [emoji]: [...(msg.reactions?.[emoji] || []), state.auth.user!.id]
+                }
+              }
+            : msg
+        )
+      }
+    }));
   };
 
-  const renderMessage = (msg: Message) => {
-    const isCurrentUser = currentUser?.username === msg.user;
-    const messageClass = msg.type === 'system' 
-      ? 'bg-gray-700 mx-auto'
-      : isCurrentUser 
-        ? 'bg-primary ml-auto' 
-        : 'bg-secondary';
-
+  // Render methods
+  const renderMessage = (msg: ChatMessage) => {
+    const isCurrentUser = msg.userId === state.auth.user?.id;
+    
     return (
-      <div key={msg.id} class={`mb-4 max-w-[80%] ${isCurrentUser ? 'ml-auto' : ''}`}>
-        <div class={`rounded-lg p-3 ${messageClass}`}>
-          {msg.type !== 'system' && (
-            <div class="font-bold text-sm text-textInverse">
-              <Obfuscated>{msg.user}</Obfuscated>
-            </div>
+      <div key={msg.id} class={`message ${isCurrentUser ? 'sent' : 'received'}`}>
+        <div class="message-content">
+          {editingMessageId === msg.id ? (
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              const input = (e.target as HTMLFormElement).querySelector('input');
+              if (input) handleMessageEdit(msg.id, input.value);
+            }}>
+              <input 
+                type="text" 
+                defaultValue={msg.content}
+                class="edit-input"
+              />
+            </form>
+          ) : (
+            <>
+              <div class="message-text">{msg.content}</div>
+              <div class="message-meta">
+                {msg.edited && <span>(edited)</span>}
+                <span>{new Date(msg.timestamp).toLocaleTimeString()}</span>
+              </div>
+              <div class="reactions">
+                {['👍', '❤️', '😂', '😮', '😢', '😡'].map(emoji => (
+                  <button onClick={() => handleReaction(msg.id, emoji)}>
+                    {emoji} {msg.reactions?.[emoji]?.length || ''}
+                  </button>
+                ))}
+              </div>
+            </>
           )}
-          <div class="text-textInverse">
-            <Obfuscated>{msg.content}</Obfuscated>
-          </div>
-          <div class="text-xs text-gray-300 mt-1">
-            {new Date(msg.timestamp).toLocaleTimeString()}
-          </div>
-          <div class="flex gap-1 mt-2">
-            {['👍', '❤️', '😂', '😮', '😢', '😡'].map(emoji => (
-              <button
-                onClick={() => handleReaction(msg.id, emoji)}
-                class="hover:opacity-80 text-sm"
-              >
-                {emoji} {msg.reactions?.[emoji]?.length || ''}
-              </button>
-            ))}
-          </div>
         </div>
       </div>
     );
   };
 
+  // Main render
+  if (!state.auth.isAuthenticated) {
+    return (
+      <div class="auth-container">
+        <h1>Welcome to Chat</h1>
+        <div class="auth-forms">
+          {/* Login Form */}
+          <form onSubmit={login}>
+            <h2>Login</h2>
+            <input
+              type="email"
+              placeholder="Email"
+              value={loginForm.email}
+              onChange={(e) => setLoginForm(prev => ({
+                ...prev,
+                email: (e.target as HTMLInputElement).value
+              }))}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={loginForm.password}
+              onChange={(e) => setLoginForm(prev => ({
+                ...prev,
+                password: (e.target as HTMLInputElement).value
+              }))}
+            />
+            <Button type="submit">Login</Button>
+          </form>
+
+          {/* Register Form */}
+          <form onSubmit={register}>
+            <h2>Register</h2>
+            {/* Similar to login form */}
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <>
-      <Head />
-      <div class={`flex flex-col h-[80vh] max-w-4xl mx-auto ${theme === 'dark' ? 'dark' : ''}`}>
-        <div class="flex justify-between items-center mb-4">
-          <h1 class="text-2xl font-bold text-textInverse">
-            <Obfuscated>Chat Room</Obfuscated>
-          </h1>
-          {currentUser && (
-            <Button onClick={handleLeave} class="text-red-500">
-              Leave Chat
-            </Button>
-          )}
+    <div class="chat-container">
+      {/* Sidebar */}
+      <div class="sidebar">
+        <div class="user-profile">
+          <img src={state.auth.user?.avatar || '/default-avatar.png'} />
+          <h3>{state.auth.user?.username}</h3>
+          <Button onClick={logout}>Logout</Button>
         </div>
 
-        {!currentUser ? (
-          <form onSubmit={handleJoin} class="flex flex-col items-center gap-4">
-            <input
-              type="text"
-              placeholder="Enter your username (min 3 characters)"
-              class="bg-secondary text-textInverse p-2 rounded-lg w-64"
-              value={username}
-              onChange={(e) => setUsername((e.target as HTMLInputElement).value)}
-              minLength={3}
-            />
-            <Button type="submit" class="bg-primary text-textInverse px-4 py-2 rounded-lg">
-              Join Chat
-            </Button>
-          </form>
-        ) : (
-          <div class="flex gap-4 flex-1">
-            <div class="flex-1 flex flex-col">
-              <div class="flex-1 overflow-y-auto bg-secondary rounded-lg p-4 mb-2">
-                {messages.map(renderMessage)}
-                <div ref={messagesEndRef} />
-              </div>
-
-              {typingUsers.length > 0 && (
-                <div class="text-sm text-gray-400 mb-2">
-                  <Obfuscated>
-                    {typingUsers
-                      .map(id => users.find(u => u.id === id)?.username)
-                      .filter(Boolean)
-                      .join(", ")}{" "}
-                    {typingUsers.length === 1 ? "is" : "are"} typing...
-                  </Obfuscated>
-                </div>
+        <div class="room-list">
+          {state.chat.rooms.map(room => (
+            <div
+              key={room.id}
+              onClick={() => setState(prev => ({
+                ...prev,
+                chat: { ...prev.chat, currentRoom: room }
+              }))}
+              class={`room ${state.chat.currentRoom?.id === room.id ? 'active' : ''}`}
+            >
+              <h4>{room.name}</h4>
+              <div class="last-message">{room.lastMessage?.content}</div>
+              {room.unreadCount > 0 && (
+                <div class="unread-badge">{room.unreadCount}</div>
               )}
-
-              <form onSubmit={handleSubmit} class="flex gap-2">
-                <input
-                  type="text"
-                  value={inputMessage}
-                  onChange={(e) => setInputMessage((e.target as HTMLInputElement).value)}
-                  onKeyPress={handleTyping}
-                  placeholder="Type a message..."
-                  class="flex-1 bg-secondary text-textInverse p-2 rounded-lg"
-                />
-                <Button
-                  type="submit"
-                  class="bg-primary text-textInverse px-4 py-2 rounded-lg"
-                >
-                  Send
-                </Button>
-              </form>
             </div>
+          ))}
+        </div>
+      </div>
 
-            <div class="w-48 bg-secondary rounded-lg p-4 hidden md:block">
-              <h3 class="font-bold mb-4 text-textInverse">
-                <Obfuscated>Online Users ({users.length})</Obfuscated>
-              </h3>
-              <div class="space-y-2">
-                {users.map(user => (
-                  <div key={user.id} class="flex items-center gap-2">
-                    <span class={`w-2 h-2 rounded-full ${
-                      user.status === 'online' ? 'bg-green-500' : 'bg-gray-500'
-                    }`} />
-                    <span class="text-textInverse">
-                      <Obfuscated>{user.username}</Obfuscated>
-                    </span>
-                  </div>
-                ))}
+      {/* Main Chat Area */}
+      <div class="chat-main">
+        {state.chat.currentRoom ? (
+          <>
+            <div class="chat-header">
+              <h2>{state.chat.currentRoom.name}</h2>
+              <div class="header-actions">
+                <Button onClick={() => setShowUserList(!showUserList)}>
+                  Users ({state.chat.currentRoom.members.length})
+                </Button>
               </div>
             </div>
+
+            <div class="messages-container">
+              {state.chat.messages
+                .filter(msg => msg.roomId === state.chat.currentRoom?.id)
+                .map(renderMessage)}
+              <div ref={messagesEndRef} />
+            </div>
+
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              sendMessage(inputMessage);
+              setInputMessage("");
+            }}>
+              <input
+                type="text"
+                value={inputMessage}
+                onChange={(e) => setInputMessage((e.target as HTMLInputElement).value)}
+                placeholder="Type a message..."
+              />
+              <Button type="submit">Send</Button>
+            </form>
+          </>
+        ) : (
+          <div class="no-room-selected">
+            Select a room to start chatting
           </div>
         )}
       </div>
-    </>
+
+      {/* User List Sidebar */}
+      {showUserList && state.chat.currentRoom && (
+        <div class="users-sidebar">
+          <h3>Users</h3>
+          {state.chat.currentRoom.members.map(userId => {
+            const user = state.chat.rooms
+              .flatMap(r => r.members)
+              .find(u => u === userId);
+            return (
+              <div key={userId} class="user-item">
+                {user}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 }
 
-export { Chat };
+export { App };

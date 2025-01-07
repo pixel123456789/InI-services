@@ -2,6 +2,7 @@ import { render } from "preact";
 import { Router, Route } from "preact-router";
 import { ObfuscateLayout } from "./util/obfuscate";
 import { useGlobalState } from "@ekwoka/preact-global-state";
+import { useEffect } from "preact/hooks";
 
 // Page imports
 import { Home } from "./pages/home";
@@ -23,55 +24,54 @@ import "./style/index.css";
 const savedTheme = localStorage.getItem("metallic/theme") || "default";
 
 function App() {
-  // Global theme state
-  const [theme] = useGlobalState<string>("theme", savedTheme);
+	// Global theme state
+	const [theme] = useGlobalState<string>("theme", savedTheme);
 
-  // Effect to apply theme to body
-  useEffect(() => {
-    document.body.setAttribute("data-theme", theme);
-    localStorage.setItem("metallic/theme", theme);
-  }, [theme]);
+	// Effect to apply theme to body
+	useEffect(() => {
+		document.body.setAttribute("data-theme", theme);
+		localStorage.setItem("metallic/theme", theme);
+	}, [theme]);
 
-  return (
-    <>
-      <ObfuscateLayout />
-      <Nav />
-      <main className={`main p-7 min-h-screen bg-background text-text`}>
-        <Router>
-          <Route path="/" component={Home} />
-          <Route path="/apps" component={Apps} />
-          <Route path="/games" component={Games} />
-          <Route path="/links" component={Links} />
-          <Route path="/settings/search" component={Settings} />
-          <Route path="/settings/tab" component={Settings} />
-          <Route path="/settings/appearance" component={Settings} />
-          <Route path="/settings/locale" component={Settings} />
-          <Route path="/privacy" component={Privacy} />
-          <Route path="/chat" component={Chat} />
-          <Route default component={Error} />
-        </Router>
-      </main>
-      <Footer />
-    </>
-  );
+	return (
+		<>
+			<ObfuscateLayout />
+			<Nav />
+			<main className={`main p-7 min-h-screen bg-background text-text`}>
+				<Router>
+					<Route path="/" component={Home} />
+					<Route path="/apps" component={Apps} />
+					<Route path="/games" component={Games} />
+					<Route path="/links" component={Links} />
+					<Route path="/settings/search" component={Settings} />
+					<Route path="/settings/tab" component={Settings} />
+					<Route path="/settings/appearance" component={Settings} />
+					<Route path="/settings/locale" component={Settings} />
+					<Route path="/privacy" component={Privacy} />
+					<Route path="/chat" component={Chat} />
+					<Route default component={Error} />
+				</Router>
+			</main>
+			<Footer />
+		</>
+	);
 }
 
 // Mount the app
 const mountPoint = document.getElementById("app");
 if (mountPoint) {
-  render(<App />, mountPoint);
+	render(<App />, mountPoint);
 } else {
-  console.error("Failed to find app mount point");
+	console.error("Failed to find app mount point");
 }
 
 // Handle service worker registration
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(error => {
-      console.error('ServiceWorker registration failed:', error);
-    });
-  });
+	window.addEventListener('load', () => {
+		navigator.serviceWorker.register('/sw.js').catch(error => {
+			console.error('ServiceWorker registration failed:', error);
+		});
+	});
 }
 
-// Export for potential testing
 export { App };

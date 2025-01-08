@@ -1,7 +1,7 @@
 {
-  "name": "metallic",
+  "name": "InI-services",
   "version": "2.1.0",
-  "description": "A powerful web proxy built for speed and customization.",
+  "description": "Built for education",
   "repository": "https://github.com/cognetwork-dev/Metallic",
   "license": "AGPL-3.0-only",
   "author": "Nebelung",
@@ -50,6 +50,6 @@
     "vite": "^5.4.2"
   },
   "engines": {
-    "node": ">=20.11.0"
+    "node": ">=23.6.0"
   }
 }

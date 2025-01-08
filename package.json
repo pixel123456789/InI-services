@@ -38,7 +38,8 @@
     "vite-plugin-minify": "^2.0.0",
     "ws": "^8.14.0",
     "zod": "^3.23.8",
-    "pnpm": "^2.1.0"
+    "pnpm": "^2.1.0",
+    "electron": "^33.3.1"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.9.0",

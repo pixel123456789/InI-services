@@ -7,7 +7,7 @@
   "author": "Nebelung",
   "type": "module",
   "scripts": {
-    "start": "pnpm run test && tsx index.ts",
+    "start": "tsx index.ts",
     "dev": "pnpm run test && vite",
     "build": "pnpm run test && tsc && vite build",
     "build-static": "pnpm run test && vite build && tsx build.ts",
